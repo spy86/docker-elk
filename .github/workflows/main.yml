@@ -32,7 +32,8 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v2
         with:
-          context: ./elasticsearch
+          context: ./
+          file: ./elasticsearch
           push: true
           tags: spy86/elasticsearch-${{ steps.date.outputs.date }}
       -
