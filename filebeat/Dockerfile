@@ -1,2 +1,2 @@
 ARG VERSION
-FROM docker.elastic.co/elasticsearch/filebeat:${VERSION}
+FROM docker.elastic.co/beats/filebeat:${VERSION}
