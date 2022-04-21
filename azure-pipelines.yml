@@ -27,8 +27,15 @@ variables:
     value: ${{parameters.TestBuild}}
   - name: tag
     value: '$(Build.BuildNumber)'
-  - name: image_name
-    value: 'docker-jenkins-agent-node'
+  - name: image_name-1
+    value: 'elasticsearch'
+  - name: image_name-2
+    value: 'filebeat'
+  - name: image_name-3
+    value: 'kibana'
+  - name: image_name-4
+    value: 'logstash'
+
 stages:
 - stage: Build_Elasticsearch
   condition: eq('${{variables.TestBuild}}', 'false')
@@ -43,15 +50,15 @@ stages:
       displayName: Build an image Elasticsearch
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/$(image_name)'
+        repository: 'spy86/$(image_name-1)'
         command: 'build'
-        Dockerfile: '**/Dockerfile'
+        Dockerfile: '**/$(image_name-1)/Dockerfile'
         tags: '$(tag)'
     - task: Docker@2
       displayName: Push an image Elasticsearch
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/$(image_name)'
+        repository: 'spy86/$(image_name-1)'
         command: 'push'
         tags: '$(tag)'
 - stage: Build_Filebeat
@@ -67,15 +74,15 @@ stages:
       displayName: Build an image Filebeat
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/$(image_name)'
+        repository: 'spy86/$(image_name-2)'
         command: 'build'
-        Dockerfile: '**/Dockerfile'
+        Dockerfile: '**/$(image_name-2)/Dockerfile'
         tags: '$(tag)'
     - task: Docker@2
       displayName: Push an image Filebeat
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/$(image_name)'
+        repository: 'spy86/$(image_name-2)'
         command: 'push'
         tags: '$(tag)'
 - stage: Build_Kibana
@@ -91,15 +98,15 @@ stages:
       displayName: Build an image Kibana
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/$(image_name)'
+        repository: 'spy86/$(image_name-3)'
         command: 'build'
-        Dockerfile: '**/Dockerfile'
+        Dockerfile: '**/$(image_name-3)/Dockerfile'
         tags: '$(tag)'
     - task: Docker@2
       displayName: Push an image Kibana
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/$(image_name)'
+        repository: 'spy86/$(image_name-3)'
         command: 'push'
         tags: '$(tag)'
 - stage: Build_Logstash
@@ -115,15 +122,15 @@ stages:
       displayName: Build an image Logstash
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/$(image_name)'
+        repository: 'spy86/$(image_name-4)'
         command: 'build'
-        Dockerfile: '**/Dockerfile'
+        Dockerfile: '**/$(image_name-4)/Dockerfile'
         tags: '$(tag)'
     - task: Docker@2
       displayName: Push an image Logstash
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/$(image_name)'
+        repository: 'spy86/$(image_name-4)'
         command: 'push'
         tags: '$(tag)'
 #####################################################################
@@ -141,15 +148,15 @@ stages:
       displayName: Build an image Elasticsearch
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/$(image_name)'
+        repository: 'spy86/$(image_name-1)'
         command: 'build'
-        Dockerfile: '**/Dockerfile'
+        Dockerfile: '**/$(image_name-1)/Dockerfile'
         tags: 'latest'
     - task: Docker@2
       displayName: Push an image Elasticsearch
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/$(image_name)'
+        repository: 'spy86/$(image_name-1)'
         command: 'push'
         tags: 'latest'
 - stage: Build_Latest_tag_Filebeat
@@ -166,15 +173,15 @@ stages:
       displayName: Build an image Filebeat
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/$(image_name)'
+        repository: 'spy86/$(image_name-2)'
         command: 'build'
-        Dockerfile: '**/Dockerfile'
+        Dockerfile: '**/$(image_name-2)/Dockerfile'
         tags: 'latest'
     - task: Docker@2
       displayName: Push an image Filebeat
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/$(image_name)'
+        repository: 'spy86/$(image_name-2)'
         command: 'push'
         tags: 'latest'
 - stage: Build_Latest_tag_Kibana
@@ -191,15 +198,15 @@ stages:
       displayName: Build an image Kibana
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/$(image_name)'
+        repository: 'spy86/$(image_name-3)'
         command: 'build'
-        Dockerfile: '**/Dockerfile'
+        Dockerfile: '**/$(image_name-3)/Dockerfile'
         tags: 'latest'
     - task: Docker@2
       displayName: Push an image Kibana
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/$(image_name)'
+        repository: 'spy86/$(image_name-3)'
         command: 'push'
         tags: 'latest'
 - stage: Build_Latest_tag_Logstash
@@ -216,15 +223,15 @@ stages:
       displayName: Build an image Logstash
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/$(image_name)'
+        repository: 'spy86/$(image_name-4)'
         command: 'build'
-        Dockerfile: '**/Dockerfile'
+        Dockerfile: '**/$(image_name-4)/Dockerfile'
         tags: 'latest'
     - task: Docker@2
       displayName: Push an image Logstash
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/$(image_name)'
+        repository: 'spy86/$(image_name-4)'
         command: 'push'
         tags: 'latest'
 #################################################
@@ -241,15 +248,15 @@ stages:
       displayName: Build an image Elasticsearch
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/$(image_name)'
+        repository: 'spy86/$(image_name-1)'
         command: 'build'
-        Dockerfile: '**/Dockerfile'
+        Dockerfile: '**/$(image_name-1)/Dockerfile'
         tags: 'latest'
     - task: Docker@2
       displayName: Push an image Elasticsearch
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/$(image_name)'
+        repository: 'spy86/$(image_name-1)'
         command: 'push'
         tags: 'latest'
 - stage: Test_Build_Filebeat
@@ -265,15 +272,15 @@ stages:
       displayName: Build an image Filebeat
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/$(image_name)'
+        repository: 'spy86/$(image_name-2)'
         command: 'build'
-        Dockerfile: '**/Dockerfile'
+        Dockerfile: '**/$(image_name-2)/Dockerfile'
         tags: 'latest'
     - task: Docker@2
       displayName: Push an image Filebeat
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/$(image_name)'
+        repository: 'spy86/$(image_name-2)'
         command: 'push'
         tags: 'latest'
 - stage: Test_Build_Kibana
@@ -289,15 +296,15 @@ stages:
       displayName: Build an image Kibana
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/$(image_name)'
+        repository: 'spy86/$(image_name-3)'
         command: 'build'
-        Dockerfile: '**/Dockerfile'
+        Dockerfile: '**/$(image_name-3)/Dockerfile'
         tags: 'latest'
     - task: Docker@2
       displayName: Push an image Kibana
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/$(image_name)'
+        repository: 'spy86/$(image_name-3)'
         command: 'push'
         tags: 'latest'
 - stage: Test_Build_Logstash
@@ -313,14 +320,14 @@ stages:
       displayName: Build an image Logstash
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/$(image_name)'
+        repository: 'spy86/$(image_name-4)'
         command: 'build'
-        Dockerfile: '**/Dockerfile'
+        Dockerfile: '**/$(image_name-4)/Dockerfile'
         tags: 'latest'
     - task: Docker@2
       displayName: Push an image Logstash
       inputs:
         containerRegistry: 'Dockerhub'
-        repository: 'spy86/$(image_name)'
+        repository: 'spy86/$(image_name-4)'
         command: 'push'
         tags: 'latest'
