@@ -1,0 +1,326 @@
+name: $(date:yyyyMMdd)$(rev:.r)
+
+parameters:
+- name: TestBuild
+  displayName: 'Test Build ???'
+  type: string
+  default: 'false'
+  values:
+    - true
+    - false
+
+schedules:
+- cron: "0 0 1 * *"
+  displayName: Run At 00:00 on day-of-month 1
+  branches:
+    include:
+    - main
+
+trigger:
+- main
+
+resources:
+- repo: self
+
+variables:
+  - name: TestBuild
+    value: ${{parameters.TestBuild}}
+  - name: tag
+    value: '$(Build.BuildNumber)'
+  - name: image_name
+    value: 'docker-jenkins-agent-node'
+stages:
+- stage: Build_Elasticsearch
+  condition: eq('${{variables.TestBuild}}', 'false')
+  displayName: Build image Elasticsearch
+  jobs:
+  - job: Build_Elasticsearch
+    displayName: Build Elasticsearch
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      displayName: Build an image Elasticsearch
+      inputs:
+        containerRegistry: 'Dockerhub'
+        repository: 'spy86/$(image_name)'
+        command: 'build'
+        Dockerfile: '**/Dockerfile'
+        tags: '$(tag)'
+    - task: Docker@2
+      displayName: Push an image Elasticsearch
+      inputs:
+        containerRegistry: 'Dockerhub'
+        repository: 'spy86/$(image_name)'
+        command: 'push'
+        tags: '$(tag)'
+- stage: Build_Filebeat
+  condition: eq('${{variables.TestBuild}}', 'false')
+  displayName: Build image Filebeat
+  jobs:
+  - job: Build_Filebeat
+    displayName: Build Filebeat
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      displayName: Build an image Filebeat
+      inputs:
+        containerRegistry: 'Dockerhub'
+        repository: 'spy86/$(image_name)'
+        command: 'build'
+        Dockerfile: '**/Dockerfile'
+        tags: '$(tag)'
+    - task: Docker@2
+      displayName: Push an image Filebeat
+      inputs:
+        containerRegistry: 'Dockerhub'
+        repository: 'spy86/$(image_name)'
+        command: 'push'
+        tags: '$(tag)'
+- stage: Build_Kibana
+  condition: eq('${{variables.TestBuild}}', 'false')
+  displayName: Build image Kibana
+  jobs:
+  - job: Build_Kibana
+    displayName: Build Kibana
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      displayName: Build an image Kibana
+      inputs:
+        containerRegistry: 'Dockerhub'
+        repository: 'spy86/$(image_name)'
+        command: 'build'
+        Dockerfile: '**/Dockerfile'
+        tags: '$(tag)'
+    - task: Docker@2
+      displayName: Push an image Kibana
+      inputs:
+        containerRegistry: 'Dockerhub'
+        repository: 'spy86/$(image_name)'
+        command: 'push'
+        tags: '$(tag)'
+- stage: Build_Logstash
+  condition: eq('${{variables.TestBuild}}', 'false')
+  displayName: Build image Logstash
+  jobs:
+  - job: Build_Logstash
+    displayName: Build Logstash
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      displayName: Build an image Logstash
+      inputs:
+        containerRegistry: 'Dockerhub'
+        repository: 'spy86/$(image_name)'
+        command: 'build'
+        Dockerfile: '**/Dockerfile'
+        tags: '$(tag)'
+    - task: Docker@2
+      displayName: Push an image Logstash
+      inputs:
+        containerRegistry: 'Dockerhub'
+        repository: 'spy86/$(image_name)'
+        command: 'push'
+        tags: '$(tag)'
+#####################################################################
+- stage: Build_Latest_tag_Elasticsearch
+  condition: eq('${{variables.TestBuild}}', 'false')
+  dependsOn: [Build]
+  displayName: Build image Elasticsearch
+  jobs:
+  - job: Build_Latest_tag_Elasticsearch
+    displayName: Build Elasticsearch
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      displayName: Build an image Elasticsearch
+      inputs:
+        containerRegistry: 'Dockerhub'
+        repository: 'spy86/$(image_name)'
+        command: 'build'
+        Dockerfile: '**/Dockerfile'
+        tags: 'latest'
+    - task: Docker@2
+      displayName: Push an image Elasticsearch
+      inputs:
+        containerRegistry: 'Dockerhub'
+        repository: 'spy86/$(image_name)'
+        command: 'push'
+        tags: 'latest'
+- stage: Build_Latest_tag_Filebeat
+  condition: eq('${{variables.TestBuild}}', 'false')
+  dependsOn: [Build]
+  displayName: Build image Filebeat
+  jobs:
+  - job: Build_Latest_tag_Filebeat
+    displayName: Build Filebeat
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      displayName: Build an image Filebeat
+      inputs:
+        containerRegistry: 'Dockerhub'
+        repository: 'spy86/$(image_name)'
+        command: 'build'
+        Dockerfile: '**/Dockerfile'
+        tags: 'latest'
+    - task: Docker@2
+      displayName: Push an image Filebeat
+      inputs:
+        containerRegistry: 'Dockerhub'
+        repository: 'spy86/$(image_name)'
+        command: 'push'
+        tags: 'latest'
+- stage: Build_Latest_tag_Kibana
+  condition: eq('${{variables.TestBuild}}', 'false')
+  dependsOn: [Build]
+  displayName: Build image Kibana
+  jobs:
+  - job: Build_Latest_tag_Kibana
+    displayName: Build Kibana
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      displayName: Build an image Kibana
+      inputs:
+        containerRegistry: 'Dockerhub'
+        repository: 'spy86/$(image_name)'
+        command: 'build'
+        Dockerfile: '**/Dockerfile'
+        tags: 'latest'
+    - task: Docker@2
+      displayName: Push an image Kibana
+      inputs:
+        containerRegistry: 'Dockerhub'
+        repository: 'spy86/$(image_name)'
+        command: 'push'
+        tags: 'latest'
+- stage: Build_Latest_tag_Logstash
+  condition: eq('${{variables.TestBuild}}', 'false')
+  dependsOn: [Build]
+  displayName: Build image Logstash
+  jobs:
+  - job: Build_Latest_tag_Logstash
+    displayName: Build Logstash
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      displayName: Build an image Logstash
+      inputs:
+        containerRegistry: 'Dockerhub'
+        repository: 'spy86/$(image_name)'
+        command: 'build'
+        Dockerfile: '**/Dockerfile'
+        tags: 'latest'
+    - task: Docker@2
+      displayName: Push an image Logstash
+      inputs:
+        containerRegistry: 'Dockerhub'
+        repository: 'spy86/$(image_name)'
+        command: 'push'
+        tags: 'latest'
+#################################################
+- stage: Test_Build_Elasticsearch
+  condition: eq('${{variables.TestBuild}}', 'true')
+  displayName: Build image Elasticsearch
+  jobs:
+  - job: Test_Build_Elasticsearch
+    displayName: Build Elasticsearch
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      displayName: Build an image Elasticsearch
+      inputs:
+        containerRegistry: 'Dockerhub'
+        repository: 'spy86/$(image_name)'
+        command: 'build'
+        Dockerfile: '**/Dockerfile'
+        tags: 'latest'
+    - task: Docker@2
+      displayName: Push an image Elasticsearch
+      inputs:
+        containerRegistry: 'Dockerhub'
+        repository: 'spy86/$(image_name)'
+        command: 'push'
+        tags: 'latest'
+- stage: Test_Build_Filebeat
+  condition: eq('${{variables.TestBuild}}', 'true')
+  displayName: Build image Filebeat
+  jobs:
+  - job: Test_Build_Filebeat
+    displayName: Build Filebeat
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      displayName: Build an image Filebeat
+      inputs:
+        containerRegistry: 'Dockerhub'
+        repository: 'spy86/$(image_name)'
+        command: 'build'
+        Dockerfile: '**/Dockerfile'
+        tags: 'latest'
+    - task: Docker@2
+      displayName: Push an image Filebeat
+      inputs:
+        containerRegistry: 'Dockerhub'
+        repository: 'spy86/$(image_name)'
+        command: 'push'
+        tags: 'latest'
+- stage: Test_Build_Kibana
+  condition: eq('${{variables.TestBuild}}', 'true')
+  displayName: Build image Kibana
+  jobs:
+  - job: Test_Build_Kibana
+    displayName: Build Kibana
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      displayName: Build an image Kibana
+      inputs:
+        containerRegistry: 'Dockerhub'
+        repository: 'spy86/$(image_name)'
+        command: 'build'
+        Dockerfile: '**/Dockerfile'
+        tags: 'latest'
+    - task: Docker@2
+      displayName: Push an image Kibana
+      inputs:
+        containerRegistry: 'Dockerhub'
+        repository: 'spy86/$(image_name)'
+        command: 'push'
+        tags: 'latest'
+- stage: Test_Build_Logstash
+  condition: eq('${{variables.TestBuild}}', 'true')
+  displayName: Build image Logstash
+  jobs:
+  - job: Test_Build_Logstash
+    displayName: Build Logstash
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      displayName: Build an image Logstash
+      inputs:
+        containerRegistry: 'Dockerhub'
+        repository: 'spy86/$(image_name)'
+        command: 'build'
+        Dockerfile: '**/Dockerfile'
+        tags: 'latest'
+    - task: Docker@2
+      displayName: Push an image Logstash
+      inputs:
+        containerRegistry: 'Dockerhub'
+        repository: 'spy86/$(image_name)'
+        command: 'push'
+        tags: 'latest'
