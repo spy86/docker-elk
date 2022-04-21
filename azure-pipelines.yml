@@ -8,6 +8,10 @@ parameters:
   values:
     - true
     - false
+- name: version
+  displayName: Version
+  type: string
+  default: '7.13.4'
 
 schedules:
 - cron: "0 0 1 * *"
@@ -35,6 +39,8 @@ variables:
     value: 'kibana'
   - name: image_name-4
     value: 'logstash'
+  - name: version
+    value: ${{parameters.version}} 
 
 stages:
 - stage: Build_Elasticsearch
@@ -54,6 +60,7 @@ stages:
         command: 'build'
         Dockerfile: '**/$(image_name-1)/Dockerfile'
         tags: '$(tag)'
+        arguments: '--build-arg VERSION=$(version)'
     - task: Docker@2
       displayName: Push an image Elasticsearch
       inputs:
@@ -61,6 +68,7 @@ stages:
         repository: 'spy86/$(image_name-1)'
         command: 'push'
         tags: '$(tag)'
+        arguments: '--build-arg VERSION=$(version)'
 - stage: Build_Filebeat
   condition: eq('${{variables.TestBuild}}', 'false')
   displayName: Build image Filebeat
@@ -78,6 +86,7 @@ stages:
         command: 'build'
         Dockerfile: '**/$(image_name-2)/Dockerfile'
         tags: '$(tag)'
+        arguments: '--build-arg VERSION=$(version)'
     - task: Docker@2
       displayName: Push an image Filebeat
       inputs:
@@ -85,6 +94,7 @@ stages:
         repository: 'spy86/$(image_name-2)'
         command: 'push'
         tags: '$(tag)'
+        arguments: '--build-arg VERSION=$(version)'
 - stage: Build_Kibana
   condition: eq('${{variables.TestBuild}}', 'false')
   displayName: Build image Kibana
@@ -102,6 +112,7 @@ stages:
         command: 'build'
         Dockerfile: '**/$(image_name-3)/Dockerfile'
         tags: '$(tag)'
+        arguments: '--build-arg VERSION=$(version)'
     - task: Docker@2
       displayName: Push an image Kibana
       inputs:
@@ -109,6 +120,7 @@ stages:
         repository: 'spy86/$(image_name-3)'
         command: 'push'
         tags: '$(tag)'
+        arguments: '--build-arg VERSION=$(version)'
 - stage: Build_Logstash
   condition: eq('${{variables.TestBuild}}', 'false')
   displayName: Build image Logstash
@@ -126,6 +138,7 @@ stages:
         command: 'build'
         Dockerfile: '**/$(image_name-4)/Dockerfile'
         tags: '$(tag)'
+        arguments: '--build-arg VERSION=$(version)'
     - task: Docker@2
       displayName: Push an image Logstash
       inputs:
@@ -133,6 +146,7 @@ stages:
         repository: 'spy86/$(image_name-4)'
         command: 'push'
         tags: '$(tag)'
+        arguments: '--build-arg VERSION=$(version)'
 #####################################################################
 - stage: Build_Latest_tag_Elasticsearch
   condition: eq('${{variables.TestBuild}}', 'false')
@@ -152,6 +166,7 @@ stages:
         command: 'build'
         Dockerfile: '**/$(image_name-1)/Dockerfile'
         tags: 'latest'
+        arguments: '--build-arg VERSION=$(version)'
     - task: Docker@2
       displayName: Push an image Elasticsearch
       inputs:
@@ -159,6 +174,7 @@ stages:
         repository: 'spy86/$(image_name-1)'
         command: 'push'
         tags: 'latest'
+        arguments: '--build-arg VERSION=$(version)'
 - stage: Build_Latest_tag_Filebeat
   condition: eq('${{variables.TestBuild}}', 'false')
   dependsOn: [Build_Filebeat]
@@ -177,6 +193,7 @@ stages:
         command: 'build'
         Dockerfile: '**/$(image_name-2)/Dockerfile'
         tags: 'latest'
+        arguments: '--build-arg VERSION=$(version)'
     - task: Docker@2
       displayName: Push an image Filebeat
       inputs:
@@ -184,6 +201,7 @@ stages:
         repository: 'spy86/$(image_name-2)'
         command: 'push'
         tags: 'latest'
+        arguments: '--build-arg VERSION=$(version)'
 - stage: Build_Latest_tag_Kibana
   condition: eq('${{variables.TestBuild}}', 'false')
   dependsOn: [Build_Kibana]
@@ -202,6 +220,7 @@ stages:
         command: 'build'
         Dockerfile: '**/$(image_name-3)/Dockerfile'
         tags: 'latest'
+        arguments: '--build-arg VERSION=$(version)'
     - task: Docker@2
       displayName: Push an image Kibana
       inputs:
@@ -209,6 +228,7 @@ stages:
         repository: 'spy86/$(image_name-3)'
         command: 'push'
         tags: 'latest'
+        arguments: '--build-arg VERSION=$(version)'
 - stage: Build_Latest_tag_Logstash
   condition: eq('${{variables.TestBuild}}', 'false')
   dependsOn: [Build_Logstash]
@@ -227,6 +247,7 @@ stages:
         command: 'build'
         Dockerfile: '**/$(image_name-4)/Dockerfile'
         tags: 'latest'
+        arguments: '--build-arg VERSION=$(version)'
     - task: Docker@2
       displayName: Push an image Logstash
       inputs:
@@ -234,6 +255,7 @@ stages:
         repository: 'spy86/$(image_name-4)'
         command: 'push'
         tags: 'latest'
+        arguments: '--build-arg VERSION=$(version)'
 #################################################
 - stage: Test_Build_Elasticsearch
   condition: eq('${{variables.TestBuild}}', 'true')
@@ -252,6 +274,7 @@ stages:
         command: 'build'
         Dockerfile: '**/$(image_name-1)/Dockerfile'
         tags: 'latest'
+        arguments: '--build-arg VERSION=$(version)'
     - task: Docker@2
       displayName: Push an image Elasticsearch
       inputs:
@@ -259,6 +282,7 @@ stages:
         repository: 'spy86/$(image_name-1)'
         command: 'push'
         tags: 'latest'
+        arguments: '--build-arg VERSION=$(version)'
 - stage: Test_Build_Filebeat
   condition: eq('${{variables.TestBuild}}', 'true')
   displayName: Build image Filebeat
@@ -276,6 +300,7 @@ stages:
         command: 'build'
         Dockerfile: '**/$(image_name-2)/Dockerfile'
         tags: 'latest'
+        arguments: '--build-arg VERSION=$(version)'
     - task: Docker@2
       displayName: Push an image Filebeat
       inputs:
@@ -283,6 +308,7 @@ stages:
         repository: 'spy86/$(image_name-2)'
         command: 'push'
         tags: 'latest'
+        arguments: '--build-arg VERSION=$(version)'
 - stage: Test_Build_Kibana
   condition: eq('${{variables.TestBuild}}', 'true')
   displayName: Build image Kibana
@@ -300,6 +326,7 @@ stages:
         command: 'build'
         Dockerfile: '**/$(image_name-3)/Dockerfile'
         tags: 'latest'
+        arguments: '--build-arg VERSION=$(version)'
     - task: Docker@2
       displayName: Push an image Kibana
       inputs:
@@ -307,6 +334,7 @@ stages:
         repository: 'spy86/$(image_name-3)'
         command: 'push'
         tags: 'latest'
+        arguments: '--build-arg VERSION=$(version)'
 - stage: Test_Build_Logstash
   condition: eq('${{variables.TestBuild}}', 'true')
   displayName: Build image Logstash
@@ -324,6 +352,7 @@ stages:
         command: 'build'
         Dockerfile: '**/$(image_name-4)/Dockerfile'
         tags: 'latest'
+        arguments: '--build-arg VERSION=$(version)'
     - task: Docker@2
       displayName: Push an image Logstash
       inputs:
@@ -331,3 +360,4 @@ stages:
         repository: 'spy86/$(image_name-4)'
         command: 'push'
         tags: 'latest'
+        arguments: '--build-arg VERSION=$(version)'
