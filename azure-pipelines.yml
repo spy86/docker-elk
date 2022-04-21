@@ -136,7 +136,7 @@ stages:
 #####################################################################
 - stage: Build_Latest_tag_Elasticsearch
   condition: eq('${{variables.TestBuild}}', 'false')
-  dependsOn: [Build]
+  dependsOn: [Build_Elasticsearch]
   displayName: Build image Elasticsearch
   jobs:
   - job: Build_Latest_tag_Elasticsearch
@@ -161,7 +161,7 @@ stages:
         tags: 'latest'
 - stage: Build_Latest_tag_Filebeat
   condition: eq('${{variables.TestBuild}}', 'false')
-  dependsOn: [Build]
+  dependsOn: [Build_Filebeat]
   displayName: Build image Filebeat
   jobs:
   - job: Build_Latest_tag_Filebeat
@@ -186,7 +186,7 @@ stages:
         tags: 'latest'
 - stage: Build_Latest_tag_Kibana
   condition: eq('${{variables.TestBuild}}', 'false')
-  dependsOn: [Build]
+  dependsOn: [Build_Kibana]
   displayName: Build image Kibana
   jobs:
   - job: Build_Latest_tag_Kibana
@@ -211,7 +211,7 @@ stages:
         tags: 'latest'
 - stage: Build_Latest_tag_Logstash
   condition: eq('${{variables.TestBuild}}', 'false')
-  dependsOn: [Build]
+  dependsOn: [Build_Logstash]
   displayName: Build image Logstash
   jobs:
   - job: Build_Latest_tag_Logstash
